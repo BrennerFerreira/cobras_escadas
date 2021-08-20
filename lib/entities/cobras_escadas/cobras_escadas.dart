@@ -17,6 +17,8 @@ class CobrasEscadas with ChangeNotifier {
   bool showSnakeAlert = false;
   bool showLadderAlert = false;
   bool playRunning = false;
+  bool gameFinished = false;
+  Player? winner;
 
   CobrasEscadas() {
     _generateLadders();
@@ -185,12 +187,34 @@ class CobrasEscadas with ChangeNotifier {
   }
 
   String jogar({required int dado1, required int dado2}) {
-    final jogadorAtual = currentPlayer;
-    final posicaoAtual =
-        (currentPlayer == 1 ? player1.position : player2.position) +
-            dado1 +
-            dado2;
+    final numeroJogadorAtual = currentPlayer;
+    final jogadorAtual = currentPlayer == 1 ? player1 : player2;
+    late int posicaoAtual;
+
+    if (gameFinished) {
+      currentPlayer = currentPlayer == 1 ? 2 : 1;
+      if (jogadorAtual.playerNumber == winner!.playerNumber) {
+        return 'Você venceu!';
+      } else {
+        return 'Você perdeu!';
+      }
+    }
+
+    if (jogadorAtual.position + dado1 + dado2 > 100) {
+      final posicoesAlemDaUltimaCasa =
+          jogadorAtual.position + dado1 + dado2 - 100;
+
+      posicaoAtual = 100 - posicoesAlemDaUltimaCasa;
+    } else if (jogadorAtual.position + dado1 + dado2 == 100) {
+      gameFinished = true;
+      winner = jogadorAtual;
+      movePlayer(steps: dado1 + dado2);
+      return 'Jogador $numeroJogadorAtual venceu o jogo!';
+    } else {
+      posicaoAtual = jogadorAtual.position + dado1 + dado2;
+    }
+
     movePlayer(steps: dado1 + dado2);
-    return 'Jogador $jogadorAtual está na casa $posicaoAtual';
+    return 'Jogador $numeroJogadorAtual está na casa $posicaoAtual';
   }
 }
