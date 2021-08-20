@@ -149,6 +149,41 @@ class _HomePageState extends State<HomePage> {
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(provider.message),
               ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Legenda",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    "BE: base de escada",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    "TE: topo de escada",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    "RC: cauda de cobra",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    "CC: cabeça de cobra",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
