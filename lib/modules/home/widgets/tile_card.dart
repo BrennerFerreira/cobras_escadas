@@ -15,7 +15,7 @@ class TileCard extends StatelessWidget {
             color: Colors.grey.shade700,
             width: 0.5,
           ),
-          color: Color(tile.tileColorValue).withOpacity(0.5),
+          color: tile.tileColorValue,
         ),
         child: Column(
           children: [

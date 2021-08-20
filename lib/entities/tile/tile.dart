@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Tile {
   final String tileNumber;
   final bool isPlayerOneHere;
@@ -6,7 +8,7 @@ class Tile {
   final bool snakeTailHere;
   final bool ladderTopHere;
   final bool ladderBaseHere;
-  final int tileColorValue;
+  final Color tileColorValue;
 
   Tile({
     required this.tileNumber,
@@ -27,7 +29,7 @@ class Tile {
     bool? snakeTailHere,
     bool? ladderTopHere,
     bool? ladderBaseHere,
-    int? tileColorValue,
+    Color? tileColorValue,
   }) {
     return Tile(
       tileNumber: tileNumber ?? this.tileNumber,

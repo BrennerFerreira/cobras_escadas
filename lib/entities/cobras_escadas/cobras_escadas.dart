@@ -9,16 +9,19 @@ import '../snake/snake.dart';
 class CobrasEscadas with ChangeNotifier {
   final List<Snake> snakes = [];
   final List<Ladder> ladders = [];
+  final List<Color> colors = [];
   Player player1 = Player(position: 1, playerNumber: 1);
   Player player2 = Player(position: 1, playerNumber: 2);
   int currentPlayer = 1;
   String message = "Aperte o botão para jogar!";
   bool showSnakeAlert = false;
   bool showLadderAlert = false;
+  bool playRunning = false;
 
   CobrasEscadas() {
     _generateLadders();
     _generateSnakes();
+    _generateColors();
   }
 
   List<int> _rollDice() {
@@ -60,6 +63,25 @@ class CobrasEscadas with ChangeNotifier {
     return isThereALadderBase.isEmpty ? null : isThereALadderBase.first;
   }
 
+  List<int> _generateColorValues() {
+    final List<int> _colorValues = [];
+
+    while (_colorValues.length < 10) {
+      final randomDouble = Random().nextDouble();
+      final colorValue = (randomDouble * 0xFFFFFF).toInt();
+      _colorValues.add(colorValue);
+    }
+
+    return _colorValues;
+  }
+
+  void _generateColors() {
+    final colorsValues = _generateColorValues();
+    while (colors.length < 100) {
+      colors.add(Color(colorsValues[Random().nextInt(10)]).withOpacity(0.5));
+    }
+  }
+
   void _generateSnakes() {
     while (snakes.length < 10) {
       final newSnake = Snake();
@@ -83,6 +105,7 @@ class CobrasEscadas with ChangeNotifier {
   }
 
   Future<void> movePlayer({required int steps}) async {
+    playRunning = true;
     bool endReached = false;
     if (currentPlayer == 1) {
       for (int i = 1; i <= steps; i++) {
@@ -116,8 +139,6 @@ class CobrasEscadas with ChangeNotifier {
       }
 
       currentPlayer = 2;
-
-      notifyListeners();
     } else {
       for (int i = 1; i <= steps; i++) {
         if (player2.position == 100) {
@@ -150,8 +171,9 @@ class CobrasEscadas with ChangeNotifier {
       }
 
       currentPlayer = 1;
-      notifyListeners();
     }
+    playRunning = false;
+    notifyListeners();
   }
 
   void playButtonPressed() {

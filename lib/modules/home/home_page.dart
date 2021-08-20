@@ -10,12 +10,6 @@ import 'widgets/tile_card.dart';
 class HomePage extends StatelessWidget {
   final list = List.generate(10, (index) => index);
 
-  int generateRandomColorValue() {
-    final randomDouble = Random().nextDouble();
-    final colorValue = (randomDouble * 0xFFFFFF).toInt();
-    return colorValue;
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -56,11 +50,15 @@ class HomePage extends StatelessWidget {
                       ).toList(),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CobrasEscadas>().playButtonPressed();
-                    },
-                    child: Text("Jogar"),
+                  Consumer<CobrasEscadas>(
+                    builder: (context, provider, _) => ElevatedButton(
+                      onPressed: provider.playRunning
+                          ? null
+                          : () {
+                              context.read<CobrasEscadas>().playButtonPressed();
+                            },
+                      child: Text("Jogar"),
+                    ),
                   ),
                   Consumer<CobrasEscadas>(
                     builder: (context, provider, _) => Text(provider.message),
@@ -96,7 +94,7 @@ class HomePage extends StatelessWidget {
                     provider.snakes.any((snake) => snake.tail == tileNumber),
                 isPlayerOneHere: provider.player1.position == tileNumber,
                 isPlayerTwoHere: provider.player2.position == tileNumber,
-                tileColorValue: generateRandomColorValue(),
+                tileColorValue: provider.colors[tileNumber - 1],
               ),
             );
           },
