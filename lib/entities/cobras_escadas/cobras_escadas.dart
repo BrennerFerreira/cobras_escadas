@@ -13,6 +13,8 @@ class CobrasEscadas with ChangeNotifier {
   Player player2 = Player(position: 1, playerNumber: 2);
   int currentPlayer = 1;
   String message = "Aperte o botão para jogar!";
+  bool showSnakeAlert = false;
+  bool showLadderAlert = false;
 
   CobrasEscadas() {
     _generateLadders();
@@ -36,6 +38,26 @@ class CobrasEscadas with ChangeNotifier {
     );
 
     return isThereASnake || isThereALadder;
+  }
+
+  Snake? _isThereASnakeHead(position) {
+    final isThereASnakeHead = snakes
+        .where(
+          (snake) => snake.head == position,
+        )
+        .toList();
+
+    return isThereASnakeHead.isEmpty ? null : isThereASnakeHead.first;
+  }
+
+  Ladder? _isThereALadderBase(position) {
+    final isThereALadderBase = ladders
+        .where(
+          (ladder) => ladder.base == position,
+        )
+        .toList();
+
+    return isThereALadderBase.isEmpty ? null : isThereALadderBase.first;
   }
 
   void _generateSnakes() {
@@ -66,19 +88,60 @@ class CobrasEscadas with ChangeNotifier {
         player1 = player1.copyWith(
           position: player1.position + 1,
         );
+
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 600));
       }
+
+      final snakePosition = _isThereASnakeHead(player1.position);
+      final ladderPosition = _isThereALadderBase(player1.position);
+
+      if (snakePosition != null) {
+        player1 = player1.copyWith(
+          position: snakePosition.tail,
+        );
+        showSnakeAlert = true;
+      }
+
+      if (ladderPosition != null) {
+        player1 = player1.copyWith(
+          position: ladderPosition.top,
+        );
+        showLadderAlert = true;
+      }
+
       currentPlayer = 2;
+
+      notifyListeners();
     } else {
       for (int i = 1; i <= steps; i++) {
         player2 = player2.copyWith(
           position: player2.position + 1,
         );
+
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 600));
       }
+
+      final snakePosition = _isThereASnakeHead(player2.position);
+      final ladderPosition = _isThereALadderBase(player2.position);
+
+      if (snakePosition != null) {
+        player2 = player2.copyWith(
+          position: snakePosition.tail,
+        );
+        showSnakeAlert = true;
+      }
+
+      if (ladderPosition != null) {
+        player2 = player2.copyWith(
+          position: ladderPosition.top,
+        );
+        showLadderAlert = true;
+      }
+
       currentPlayer = 1;
+      notifyListeners();
     }
   }
 

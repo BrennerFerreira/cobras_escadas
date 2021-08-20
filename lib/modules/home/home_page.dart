@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../entities/cobras_escadas/cobras_escadas.dart';
-import '../../entities/tile_card/tile_card.dart';
+import '../../entities/tile/tile.dart';
 import 'widgets/tile_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -86,6 +86,14 @@ class HomePage extends StatelessWidget {
             return TileCard(
               tile: Tile(
                 tileNumber: "$tileNumber",
+                ladderTopHere:
+                    provider.ladders.any((ladder) => ladder.top == tileNumber),
+                ladderBaseHere:
+                    provider.ladders.any((ladder) => ladder.base == tileNumber),
+                snakeHeadHere:
+                    provider.snakes.any((snake) => snake.head == tileNumber),
+                snakeTailHere:
+                    provider.snakes.any((snake) => snake.tail == tileNumber),
                 isPlayerOneHere: provider.player1.position == tileNumber,
                 isPlayerTwoHere: provider.player2.position == tileNumber,
                 tileColorValue: generateRandomColorValue(),

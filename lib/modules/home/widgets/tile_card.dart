@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../entities/tile_card/tile_card.dart';
+import '../../../entities/tile/tile.dart';
 
 class TileCard extends StatelessWidget {
   final Tile tile;
@@ -21,7 +21,39 @@ class TileCard extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.topLeft,
-              child: Text(tile.tileNumber),
+              child: Row(
+                children: [
+                  Text(tile.tileNumber),
+                  if (tile.ladderTopHere)
+                    Text(
+                      "LT",
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  if (tile.ladderBaseHere)
+                    Text(
+                      "LB",
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  if (tile.snakeHeadHere)
+                    Text(
+                      "SH",
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  if (tile.snakeTailHere)
+                    Text(
+                      "ST",
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                ],
+              ),
             ),
             AnimatedOpacity(
               opacity: tile.isPlayerOneHere ? 1 : 0,
