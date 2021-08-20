@@ -130,14 +130,18 @@ class CobrasEscadas with ChangeNotifier {
         player1 = player1.copyWith(
           position: snakePosition.tail,
         );
+
         showSnakeAlert = true;
+        message = "Jogador 1 está na casa ${snakePosition.tail}";
       }
 
       if (ladderPosition != null) {
         player1 = player1.copyWith(
           position: ladderPosition.top,
         );
+
         showLadderAlert = true;
+        message = "Jogador 1 está na casa ${ladderPosition.top}";
       }
 
       currentPlayer = 2;
@@ -162,14 +166,18 @@ class CobrasEscadas with ChangeNotifier {
         player2 = player2.copyWith(
           position: snakePosition.tail,
         );
+
         showSnakeAlert = true;
+        message = "Jogador 2 está na casa ${snakePosition.tail}";
       }
 
       if (ladderPosition != null) {
         player2 = player2.copyWith(
           position: ladderPosition.top,
         );
+
         showLadderAlert = true;
+        message = "Jogador 2 está na casa ${ladderPosition.top}";
       }
 
       currentPlayer = 1;
@@ -189,6 +197,7 @@ class CobrasEscadas with ChangeNotifier {
   String jogar({required int dado1, required int dado2}) {
     final numeroJogadorAtual = currentPlayer;
     final jogadorAtual = currentPlayer == 1 ? player1 : player2;
+    final posicaoComDados = jogadorAtual.position + dado1 + dado2;
     late int posicaoAtual;
 
     if (gameFinished) {
@@ -200,20 +209,17 @@ class CobrasEscadas with ChangeNotifier {
       }
     }
 
-    if (jogadorAtual.position + dado1 + dado2 > 100) {
-      final posicoesAlemDaUltimaCasa =
-          jogadorAtual.position + dado1 + dado2 - 100;
-
+    if (posicaoComDados > 100) {
+      final posicoesAlemDaUltimaCasa = posicaoComDados - 100;
       posicaoAtual = 100 - posicoesAlemDaUltimaCasa;
-    } else if (jogadorAtual.position + dado1 + dado2 == 100) {
+    } else if (posicaoComDados == 100) {
       gameFinished = true;
       winner = jogadorAtual;
       movePlayer(steps: dado1 + dado2);
       return 'Jogador $numeroJogadorAtual venceu o jogo!';
-    } else {
-      posicaoAtual = jogadorAtual.position + dado1 + dado2;
     }
 
+    posicaoAtual = posicaoComDados;
     movePlayer(steps: dado1 + dado2);
     return 'Jogador $numeroJogadorAtual está na casa $posicaoAtual';
   }
