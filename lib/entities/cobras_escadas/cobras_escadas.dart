@@ -81,7 +81,7 @@ class CobrasEscadas with ChangeNotifier {
   void _generateColors() {
     final colorsValues = _generateColorValues();
     while (colors.length < 100) {
-      colors.add(Color(colorsValues[Random().nextInt(10)]).withOpacity(0.5));
+      colors.add(Color(colorsValues[Random().nextInt(10)]));
     }
   }
 

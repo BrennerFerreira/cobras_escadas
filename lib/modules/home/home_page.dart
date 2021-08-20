@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,7 @@ class _HomePageState extends State<HomePage> {
     if (context.read<CobrasEscadas>().showSnakeAlert) {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (_) {
           final lastPlayer = context.read<CobrasEscadas>().lastPlayer == 1
               ? context.read<CobrasEscadas>().player1
@@ -44,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     if (context.read<CobrasEscadas>().showLadderAlert) {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (_) {
           final lastPlayer = context.read<CobrasEscadas>().currentPlayer == 1
               ? context.read<CobrasEscadas>().player2
@@ -87,10 +91,15 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(
                   "Vez do jogador ${provider.currentPlayer}",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Container(
