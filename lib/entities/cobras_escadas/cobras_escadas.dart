@@ -83,10 +83,15 @@ class CobrasEscadas with ChangeNotifier {
   }
 
   Future<void> movePlayer({required int steps}) async {
+    bool endReached = false;
     if (currentPlayer == 1) {
       for (int i = 1; i <= steps; i++) {
+        if (player1.position == 100) {
+          endReached = true;
+        }
+
         player1 = player1.copyWith(
-          position: player1.position + 1,
+          position: endReached ? player1.position - 1 : player1.position + 1,
         );
 
         notifyListeners();
@@ -115,8 +120,12 @@ class CobrasEscadas with ChangeNotifier {
       notifyListeners();
     } else {
       for (int i = 1; i <= steps; i++) {
+        if (player2.position == 100) {
+          endReached = true;
+        }
+
         player2 = player2.copyWith(
-          position: player2.position + 1,
+          position: endReached ? player2.position - 1 : player2.position + 1,
         );
 
         notifyListeners();
