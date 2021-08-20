@@ -13,6 +13,7 @@ class CobrasEscadas with ChangeNotifier {
   Player player1 = Player(position: 1, playerNumber: 1);
   Player player2 = Player(position: 1, playerNumber: 2);
   int currentPlayer = 1;
+  int lastPlayer = 2;
   String message = "Aperte o botão para jogar!";
   bool showSnakeAlert = false;
   bool showLadderAlert = false;
@@ -124,6 +125,7 @@ class CobrasEscadas with ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 600));
       }
 
+      lastPlayer = 1;
       final snakePosition = _isThereASnakeHead(player1.position);
       final ladderPosition = _isThereALadderBase(player1.position);
 
@@ -161,6 +163,7 @@ class CobrasEscadas with ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 600));
       }
 
+      lastPlayer = 2;
       final snakePosition = _isThereASnakeHead(player2.position);
       final ladderPosition = _isThereALadderBase(player2.position);
 
@@ -186,6 +189,7 @@ class CobrasEscadas with ChangeNotifier {
         currentPlayer = 1;
       }
     }
+
     playRunning = false;
     notifyListeners();
   }

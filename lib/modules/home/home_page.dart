@@ -16,9 +16,9 @@ class _HomePageState extends State<HomePage> {
       showDialog(
         context: context,
         builder: (_) {
-          final lastPlayer = context.read<CobrasEscadas>().currentPlayer == 1
-              ? context.read<CobrasEscadas>().player2
-              : context.read<CobrasEscadas>().player1;
+          final lastPlayer = context.read<CobrasEscadas>().lastPlayer == 1
+              ? context.read<CobrasEscadas>().player1
+              : context.read<CobrasEscadas>().player2;
           return AlertDialog(
             title: Text("Que pena!"),
             content: Text(
