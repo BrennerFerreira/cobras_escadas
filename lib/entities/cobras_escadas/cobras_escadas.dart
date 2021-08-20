@@ -217,9 +217,10 @@ class CobrasEscadas with ChangeNotifier {
       winner = jogadorAtual;
       movePlayer(steps: dado1 + dado2);
       return 'Jogador $numeroJogadorAtual venceu o jogo!';
+    } else {
+      posicaoAtual = posicaoComDados;
     }
 
-    posicaoAtual = posicaoComDados;
     movePlayer(steps: dado1 + dado2);
     return 'Jogador $numeroJogadorAtual está na casa $posicaoAtual';
   }
