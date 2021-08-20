@@ -8,7 +8,11 @@ class Ladder {
 
   factory Ladder() {
     final firstPosition = PositionGenerator.generatePosition();
-    final secondPosition = PositionGenerator.generatePosition();
+    int secondPosition = PositionGenerator.generatePosition();
+
+    while (firstPosition == secondPosition) {
+      secondPosition = PositionGenerator.generatePosition();
+    }
 
     if (firstPosition > secondPosition) {
       return Ladder._(top: firstPosition, base: secondPosition);

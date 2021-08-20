@@ -8,7 +8,11 @@ class Snake {
 
   factory Snake() {
     final firstPosition = PositionGenerator.generatePosition();
-    final secondPosition = PositionGenerator.generatePosition();
+    int secondPosition = PositionGenerator.generatePosition();
+
+    while (firstPosition == secondPosition) {
+      secondPosition = PositionGenerator.generatePosition();
+    }
 
     if (firstPosition > secondPosition) {
       return Snake._(head: firstPosition, tail: secondPosition);
