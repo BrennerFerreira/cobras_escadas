@@ -17,8 +17,29 @@ class TileCard extends StatelessWidget {
           ),
           color: Color(tile.tileColorValue).withOpacity(0.5),
         ),
-        alignment: Alignment.topLeft,
-        child: Text(tile.tileNumber),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(tile.tileNumber),
+            ),
+            if (tile.isPlayerOneHere)
+              Container(
+                height: 10,
+                width: 10,
+                color: Colors.black,
+              ),
+            if (tile.isPlayerTwoHere)
+              Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
+              )
+          ],
+        ),
       ),
     );
   }
