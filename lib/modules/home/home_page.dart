@@ -125,14 +125,25 @@ class _HomePageState extends State<HomePage> {
                   ).toList(),
                 ),
               ),
-              Consumer<CobrasEscadas>(
-                builder: (context, provider, _) => ElevatedButton(
-                  onPressed: provider.playRunning
-                      ? null
-                      : () {
-                          context.read<CobrasEscadas>().playButtonPressed();
-                        },
-                  child: Text("Jogar"),
+              SizedBox(
+                height: 50,
+                width: 150,
+                child: Consumer<CobrasEscadas>(
+                  builder: (context, provider, _) => ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      shadowColor: Colors.blue.withOpacity(0.5),
+                      elevation: 5,
+                    ),
+                    onPressed: provider.playRunning
+                        ? null
+                        : () {
+                            context.read<CobrasEscadas>().playButtonPressed();
+                          },
+                    child: Text("Jogar"),
+                  ),
                 ),
               ),
               Consumer<CobrasEscadas>(
