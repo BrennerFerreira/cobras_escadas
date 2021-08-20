@@ -28,6 +28,11 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 32.0),
               child: Column(
                 children: [
+                  Consumer<CobrasEscadas>(
+                    builder: (context, provider, _) => Text(
+                      "Vez do jogador ${provider.currentPlayer}",
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.025,
@@ -56,6 +61,9 @@ class HomePage extends StatelessWidget {
                       context.read<CobrasEscadas>().playButtonPressed();
                     },
                     child: Text("Jogar"),
+                  ),
+                  Consumer<CobrasEscadas>(
+                    builder: (context, provider, _) => Text(provider.message),
                   ),
                 ],
               ),

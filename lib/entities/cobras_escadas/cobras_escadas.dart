@@ -60,32 +60,43 @@ class CobrasEscadas with ChangeNotifier {
     }
   }
 
-  void movePlayer({required int steps}) {
+  Future<void> movePlayer({required int steps}) async {
     if (currentPlayer == 1) {
-      player1 = player1.copyWith(
-        position: player1.position + steps,
-      );
+      for (int i = 1; i <= steps; i++) {
+        player1 = player1.copyWith(
+          position: player1.position + 1,
+        );
+        notifyListeners();
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
       currentPlayer = 2;
     } else {
-      player2 = player2.copyWith(
-        position: player2.position + steps,
-      );
+      for (int i = 1; i <= steps; i++) {
+        player2 = player2.copyWith(
+          position: player2.position + 1,
+        );
+        notifyListeners();
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
       currentPlayer = 1;
     }
-    notifyListeners();
   }
 
   void playButtonPressed() {
     final dados = _rollDice();
 
-    jogar(dado1: dados[0], dado2: dados[1]);
+    message = jogar(dado1: dados[0], dado2: dados[1]);
+
+    notifyListeners();
   }
 
   String jogar({required int dado1, required int dado2}) {
-    print("dado 1: $dado1, dado 2: $dado2, total: ${dado1 + dado2}");
-    movePlayer(steps: dado1 + dado2);
+    final jogadorAtual = currentPlayer;
     final posicaoAtual =
-        currentPlayer == 1 ? player1.position : player2.position;
-    return 'Jogador $currentPlayer está na casa $posicaoAtual';
+        (currentPlayer == 1 ? player1.position : player2.position) +
+            dado1 +
+            dado2;
+    movePlayer(steps: dado1 + dado2);
+    return 'Jogador $jogadorAtual está na casa $posicaoAtual';
   }
 }
