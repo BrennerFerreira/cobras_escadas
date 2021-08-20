@@ -106,7 +106,8 @@ class CobrasEscadas with ChangeNotifier {
     }
   }
 
-  Future<void> movePlayer({required int steps}) async {
+  Future<void> movePlayer({required int dado1, required int dado2}) async {
+    final steps = dado1 + dado2;
     playRunning = true;
     bool endReached = false;
     if (currentPlayer == 1) {
@@ -143,8 +144,9 @@ class CobrasEscadas with ChangeNotifier {
         showLadderAlert = true;
         message = "Jogador 1 está na casa ${ladderPosition.top}";
       }
-
-      currentPlayer = 2;
+      if (dado1 != dado2 || gameFinished) {
+        currentPlayer = 2;
+      }
     } else {
       for (int i = 1; i <= steps; i++) {
         if (player2.position == 100) {
@@ -180,7 +182,9 @@ class CobrasEscadas with ChangeNotifier {
         message = "Jogador 2 está na casa ${ladderPosition.top}";
       }
 
-      currentPlayer = 1;
+      if (dado1 != dado2 || gameFinished) {
+        currentPlayer = 1;
+      }
     }
     playRunning = false;
     notifyListeners();
@@ -215,13 +219,13 @@ class CobrasEscadas with ChangeNotifier {
     } else if (posicaoComDados == 100) {
       gameFinished = true;
       winner = jogadorAtual;
-      movePlayer(steps: dado1 + dado2);
+      movePlayer(dado1: dado1, dado2: dado2);
       return 'Jogador $numeroJogadorAtual venceu o jogo!';
     } else {
       posicaoAtual = posicaoComDados;
     }
 
-    movePlayer(steps: dado1 + dado2);
+    movePlayer(dado1: dado1, dado2: dado2);
     return 'Jogador $numeroJogadorAtual está na casa $posicaoAtual';
   }
 }
