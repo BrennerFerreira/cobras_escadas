@@ -67,7 +67,7 @@ class CobrasEscadas with ChangeNotifier {
           position: player1.position + 1,
         );
         notifyListeners();
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 600));
       }
       currentPlayer = 2;
     } else {
@@ -76,7 +76,7 @@ class CobrasEscadas with ChangeNotifier {
           position: player2.position + 1,
         );
         notifyListeners();
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 600));
       }
       currentPlayer = 1;
     }

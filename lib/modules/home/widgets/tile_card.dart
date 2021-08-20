@@ -23,21 +23,27 @@ class TileCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Text(tile.tileNumber),
             ),
-            if (tile.isPlayerOneHere)
-              Container(
+            AnimatedOpacity(
+              opacity: tile.isPlayerOneHere ? 1 : 0,
+              duration: const Duration(milliseconds: 500),
+              child: Container(
                 height: 10,
                 width: 10,
                 color: Colors.black,
               ),
-            if (tile.isPlayerTwoHere)
-              Container(
+            ),
+            AnimatedOpacity(
+              opacity: tile.isPlayerTwoHere ? 1 : 0,
+              duration: const Duration(milliseconds: 500),
+              child: Container(
                 height: 10,
                 width: 10,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.black,
                 ),
-              )
+              ),
+            )
           ],
         ),
       ),
