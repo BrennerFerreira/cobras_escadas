@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(
                   provider.message,
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               Column(

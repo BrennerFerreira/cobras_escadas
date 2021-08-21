@@ -214,11 +214,7 @@ class CobrasEscadas with ChangeNotifier {
     if (gameFinished) {
       mensagemDados = '';
       currentPlayer = currentPlayer == 1 ? 2 : 1;
-      if (jogadorAtual.playerNumber == winner!.playerNumber) {
-        return 'Você venceu!';
-      } else {
-        return 'Você perdeu!';
-      }
+      return 'O jogo acabou!';
     }
 
     if (posicaoComDados > 100) {
@@ -228,7 +224,7 @@ class CobrasEscadas with ChangeNotifier {
       gameFinished = true;
       winner = jogadorAtual;
       movePlayer(dado1: dado1, dado2: dado2);
-      return 'Jogador $numeroJogadorAtual venceu o jogo!';
+      return 'Jogador $numeroJogadorAtual venceu!';
     } else {
       posicaoAtual = posicaoComDados;
     }
