@@ -29,10 +29,6 @@ ponta da cauda da cobra.
 O primeiro jogador a fazer isso, vence. Mas se o somatório dos dados com a
 casa atual for maior que 100, o jogador deve se movimentar para trás até a
 contagem terminar, como se ele tivesse batido em uma parede e retornasse.
-○ Exemplo, se um jogador está na casa 98 e o somatório dos dados dá
-5, o jogador deve se mover até a casa 100 (dois movimentos), e fazer
-o retorno, caminhando para 99, 98 e 97 (três, quatro e cinco
-movimentos.)
 - Se um jogador tirar dados iguais e chegar exatamente na casa 100 sem
 movimentos restantes, então o jogador vence o jogo e não precisa jogar
 novamente.
