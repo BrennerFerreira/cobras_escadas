@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../cobra/cobra.dart';
 import '../escada/escada.dart';
 import '../jogador/jogador.dart';
-import '../cobra/cobra.dart';
 
 class CobrasEscadas with ChangeNotifier {
   List<Cobra> cobras = [];

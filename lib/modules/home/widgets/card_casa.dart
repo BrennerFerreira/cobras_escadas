@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../entities/cobras_escadas/cobras_escadas.dart';
 import '../../../entities/casa/casa.dart';
+import '../../../entities/cobras_escadas/cobras_escadas.dart';
 
 class CardDeCasa extends StatelessWidget {
   final Casa casa;

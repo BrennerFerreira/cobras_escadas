@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import '../gerador_de_posicoes/gerador_de_posicoes.dart';
 
 class Escada {
