@@ -95,7 +95,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(
-                  "Vez do jogador ${provider.currentPlayer}",
+                  provider.gameFinished
+                      ? "O jogo acabou!"
+                      : "Vez do jogador ${provider.currentPlayer}",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -146,15 +148,19 @@ class _HomePageState extends State<HomePage> {
                     onPressed: provider.playRunning
                         ? null
                         : () {
-                            context.read<CobrasEscadas>().playButtonPressed();
+                            if (provider.gameFinished) {
+                              provider.reiniciar();
+                            } else {
+                              provider.playButtonPressed();
+                            }
                           },
-                    child: Text("Jogar"),
+                    child: Text(provider.gameFinished ? "Reiniciar" : "Jogar"),
                   ),
                 ),
               ),
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(
-                  provider.message,
+                  provider.gameFinished ? '' : provider.message,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -162,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Legenda",
+                    "Legenda:",
                     style: TextStyle(
                       fontSize: 12,
                     ),

@@ -7,9 +7,9 @@ import '../player/player.dart';
 import '../snake/snake.dart';
 
 class CobrasEscadas with ChangeNotifier {
-  final List<Snake> snakes = [];
-  final List<Ladder> ladders = [];
-  final List<Color> colors = [];
+  List<Snake> snakes = [];
+  List<Ladder> ladders = [];
+  List<Color> colors = [];
   Player player1 = Player(position: 1, playerNumber: 1);
   Player player2 = Player(position: 1, playerNumber: 2);
   int currentPlayer = 1;
@@ -231,5 +231,28 @@ class CobrasEscadas with ChangeNotifier {
 
     movePlayer(dado1: dado1, dado2: dado2);
     return 'Jogador $numeroJogadorAtual está na casa $posicaoAtual';
+  }
+
+  void reiniciar() {
+    snakes = [];
+    ladders = [];
+    colors = [];
+    player1 = Player(position: 1, playerNumber: 1);
+    player2 = Player(position: 1, playerNumber: 2);
+    currentPlayer = 1;
+    lastPlayer = 2;
+    message = "Aperte o botão para jogar!";
+    mensagemDados = '';
+    showSnakeAlert = false;
+    showLadderAlert = false;
+    playRunning = false;
+    gameFinished = false;
+    winner = null;
+
+    _generateLadders();
+    _generateSnakes();
+    _generateColors();
+
+    notifyListeners();
   }
 }
