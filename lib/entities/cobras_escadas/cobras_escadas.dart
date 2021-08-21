@@ -2,33 +2,33 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../ladder/ladder.dart';
-import '../player/player.dart';
-import '../snake/snake.dart';
+import '../escada/escada.dart';
+import '../jogador/jogador.dart';
+import '../cobra/cobra.dart';
 
 class CobrasEscadas with ChangeNotifier {
-  List<Snake> snakes = [];
-  List<Ladder> ladders = [];
-  List<Color> colors = [];
-  Player player1 = Player(position: 1, playerNumber: 1);
-  Player player2 = Player(position: 1, playerNumber: 2);
-  int currentPlayer = 1;
-  int lastPlayer = 2;
-  String message = "Aperte o botão para jogar!";
+  List<Cobra> cobras = [];
+  List<Escada> escadas = [];
+  List<Color> cores = [];
+  Jogador jogador1 = Jogador(posicao: 1, numeroDoJogador: 1);
+  Jogador jogador2 = Jogador(posicao: 1, numeroDoJogador: 2);
+  int jogadorAtual = 1;
+  int ultimoJogador = 2;
+  String mensagem = "Aperte o botão para jogar!";
   String mensagemDados = '';
-  bool showSnakeAlert = false;
-  bool showLadderAlert = false;
-  bool playRunning = false;
-  bool gameFinished = false;
-  Player? winner;
+  bool mostrarAlertaDeCobra = false;
+  bool mostrarAlertaDeEscada = false;
+  bool jogadaEmAndamento = false;
+  bool jogoFinalizado = false;
+  Jogador? vencedor;
 
   CobrasEscadas() {
-    _generateLadders();
-    _generateSnakes();
-    _generateColors();
+    _gerarEscadas();
+    _gerarCobras();
+    _gerarCores();
   }
 
-  List<int> _rollDice() {
+  List<int> _rolarDados() {
     final dado1 = Random().nextInt(6) + 1;
     final dado2 = Random().nextInt(6) + 1;
 
@@ -37,183 +37,178 @@ class CobrasEscadas with ChangeNotifier {
     return [dado1, dado2];
   }
 
-  bool _verifyPositionIsTaken(int position) {
-    final isThereASnake = snakes.any(
-      (snake) => snake.head == position || snake.tail == position,
+  bool _verificarSePosicaoEstaOcupada(int posicao) {
+    final existeCobraNoLugar = cobras.any(
+      (cobra) => cobra.cabeca == posicao || cobra.cauda == posicao,
     );
 
-    final isThereALadder = ladders.any(
-      (ladder) => ladder.base == position || ladder.top == position,
+    final existeEscadaNoLugar = escadas.any(
+      (escada) => escada.base == posicao || escada.topo == posicao,
     );
 
-    return isThereASnake || isThereALadder;
+    return existeCobraNoLugar || existeEscadaNoLugar;
   }
 
-  Snake? _isThereASnakeHead(position) {
-    final isThereASnakeHead = snakes
+  Cobra? _haCobraNoLugar(posicao) {
+    final haCobraNoLugar =
+        cobras.where((cobra) => cobra.cabeca == posicao).toList();
+
+    return haCobraNoLugar.isEmpty ? null : haCobraNoLugar.first;
+  }
+
+  Escada? _haEscadaNoLugar(posicao) {
+    final haEscadaNoLugar = escadas
         .where(
-          (snake) => snake.head == position,
+          (escada) => escada.base == posicao,
         )
         .toList();
 
-    return isThereASnakeHead.isEmpty ? null : isThereASnakeHead.first;
+    return haEscadaNoLugar.isEmpty ? null : haEscadaNoLugar.first;
   }
 
-  Ladder? _isThereALadderBase(position) {
-    final isThereALadderBase = ladders
-        .where(
-          (ladder) => ladder.base == position,
-        )
-        .toList();
+  List<int> _gerarValoresDeCores() {
+    final List<int> _valoresDeCores = [];
 
-    return isThereALadderBase.isEmpty ? null : isThereALadderBase.first;
-  }
-
-  List<int> _generateColorValues() {
-    final List<int> _colorValues = [];
-
-    while (_colorValues.length < 10) {
+    while (_valoresDeCores.length < 10) {
       final randomDouble = Random().nextDouble();
-      final colorValue = (randomDouble * 0xFFFFFF).toInt();
-      _colorValues.add(colorValue);
+      final valorDeCor = (randomDouble * 0xFFFFFF).toInt();
+      _valoresDeCores.add(valorDeCor);
     }
 
-    return _colorValues;
+    return _valoresDeCores;
   }
 
-  void _generateColors() {
-    final colorsValues = _generateColorValues();
-    while (colors.length < 100) {
-      colors.add(Color(colorsValues[Random().nextInt(10)]));
+  void _gerarCores() {
+    final valoresDeCores = _gerarValoresDeCores();
+    while (cores.length < 100) {
+      cores.add(Color(valoresDeCores[Random().nextInt(10)]));
     }
   }
 
-  void _generateSnakes() {
-    while (snakes.length < 10) {
-      final newSnake = Snake();
+  void _gerarCobras() {
+    while (cobras.length < 10) {
+      final novaCobra = Cobra();
 
-      if (!_verifyPositionIsTaken(newSnake.head) &&
-          !_verifyPositionIsTaken(newSnake.tail)) {
-        snakes.add(newSnake);
+      if (!_verificarSePosicaoEstaOcupada(novaCobra.cabeca) &&
+          !_verificarSePosicaoEstaOcupada(novaCobra.cauda)) {
+        cobras.add(novaCobra);
       }
     }
   }
 
-  void _generateLadders() {
-    while (ladders.length < 10) {
-      final newLadder = Ladder();
+  void _gerarEscadas() {
+    while (escadas.length < 10) {
+      final novaEscada = Escada();
 
-      if (!_verifyPositionIsTaken(newLadder.top) &&
-          !_verifyPositionIsTaken(newLadder.base)) {
-        ladders.add(newLadder);
+      if (!_verificarSePosicaoEstaOcupada(novaEscada.topo) &&
+          !_verificarSePosicaoEstaOcupada(novaEscada.base)) {
+        escadas.add(novaEscada);
       }
     }
   }
 
-  Future<void> movePlayer({required int dado1, required int dado2}) async {
-    final steps = dado1 + dado2;
-    playRunning = true;
-    bool endReached = false;
-    if (currentPlayer == 1) {
-      for (int i = 1; i <= steps; i++) {
-        if (player1.position == 100) {
-          endReached = true;
+  Future<void> moverJogador({required int dado1, required int dado2}) async {
+    final passos = dado1 + dado2;
+    jogadaEmAndamento = true;
+    bool finalAlcancado = false;
+    if (jogadorAtual == 1) {
+      for (int i = 1; i <= passos; i++) {
+        if (jogador1.posicao == 100) {
+          finalAlcancado = true;
         }
 
-        player1 = player1.copyWith(
-          position: endReached ? player1.position - 1 : player1.position + 1,
+        jogador1 = jogador1.copyWith(
+          posicao: finalAlcancado ? jogador1.posicao - 1 : jogador1.posicao + 1,
         );
 
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 600));
       }
 
-      lastPlayer = 1;
-      final snakePosition = _isThereASnakeHead(player1.position);
-      final ladderPosition = _isThereALadderBase(player1.position);
+      ultimoJogador = 1;
+      final posicaoDeCobra = _haCobraNoLugar(jogador1.posicao);
+      final posicaoDeEscada = _haEscadaNoLugar(jogador1.posicao);
 
-      if (snakePosition != null) {
-        player1 = player1.copyWith(
-          position: snakePosition.tail,
+      if (posicaoDeCobra != null) {
+        jogador1 = jogador1.copyWith(
+          posicao: posicaoDeCobra.cauda,
         );
 
-        showSnakeAlert = true;
-        message = "Jogador 1 está na casa ${snakePosition.tail}";
+        mostrarAlertaDeCobra = true;
+        mensagem = "Jogador 1 está na casa ${posicaoDeCobra.cauda}";
       }
 
-      if (ladderPosition != null) {
-        player1 = player1.copyWith(
-          position: ladderPosition.top,
+      if (posicaoDeEscada != null) {
+        jogador1 = jogador1.copyWith(
+          posicao: posicaoDeEscada.topo,
         );
 
-        showLadderAlert = true;
-        message = "Jogador 1 está na casa ${ladderPosition.top}";
+        mostrarAlertaDeEscada = true;
+        mensagem = "Jogador 1 está na casa ${posicaoDeEscada.topo}";
       }
-      if (dado1 != dado2 || gameFinished) {
-        currentPlayer = 2;
+      if (dado1 != dado2 || jogoFinalizado) {
+        jogadorAtual = 2;
       }
     } else {
-      for (int i = 1; i <= steps; i++) {
-        if (player2.position == 100) {
-          endReached = true;
+      for (int i = 1; i <= passos; i++) {
+        if (jogador2.posicao == 100) {
+          finalAlcancado = true;
         }
 
-        player2 = player2.copyWith(
-          position: endReached ? player2.position - 1 : player2.position + 1,
+        jogador2 = jogador2.copyWith(
+          posicao: finalAlcancado ? jogador2.posicao - 1 : jogador2.posicao + 1,
         );
 
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 600));
       }
 
-      lastPlayer = 2;
-      final snakePosition = _isThereASnakeHead(player2.position);
-      final ladderPosition = _isThereALadderBase(player2.position);
+      ultimoJogador = 2;
+      final posicaoDeCobra = _haCobraNoLugar(jogador2.posicao);
+      final posicaoDeEscada = _haEscadaNoLugar(jogador2.posicao);
 
-      if (snakePosition != null) {
-        player2 = player2.copyWith(
-          position: snakePosition.tail,
+      if (posicaoDeCobra != null) {
+        jogador2 = jogador2.copyWith(
+          posicao: posicaoDeCobra.cauda,
         );
 
-        showSnakeAlert = true;
-        message = "Jogador 2 está na casa ${snakePosition.tail}";
+        mostrarAlertaDeCobra = true;
+        mensagem = "Jogador 2 está na casa ${posicaoDeCobra.cauda}";
       }
 
-      if (ladderPosition != null) {
-        player2 = player2.copyWith(
-          position: ladderPosition.top,
+      if (posicaoDeEscada != null) {
+        jogador2 = jogador2.copyWith(
+          posicao: posicaoDeEscada.topo,
         );
 
-        showLadderAlert = true;
-        message = "Jogador 2 está na casa ${ladderPosition.top}";
+        mostrarAlertaDeEscada = true;
+        mensagem = "Jogador 2 está na casa ${posicaoDeEscada.topo}";
       }
 
-      if (dado1 != dado2 || gameFinished) {
-        currentPlayer = 1;
+      if (dado1 != dado2 || jogoFinalizado) {
+        jogadorAtual = 1;
       }
     }
 
-    playRunning = false;
+    jogadaEmAndamento = false;
     notifyListeners();
   }
 
-  void playButtonPressed() {
-    final dados = _rollDice();
-
-    message = jogar(dado1: dados[0], dado2: dados[1]);
-
+  void botaoJogarPressionado() {
+    final dados = _rolarDados();
+    mensagem = jogar(dado1: dados[0], dado2: dados[1]);
     notifyListeners();
   }
 
   String jogar({required int dado1, required int dado2}) {
-    final numeroJogadorAtual = currentPlayer;
-    final jogadorAtual = currentPlayer == 1 ? player1 : player2;
-    final posicaoComDados = jogadorAtual.position + dado1 + dado2;
+    final numeroJogadorAtual = jogadorAtual;
+    final jogadorQueAcabouDeJogar = jogadorAtual == 1 ? jogador1 : jogador2;
+    final posicaoComDados = jogadorQueAcabouDeJogar.posicao + dado1 + dado2;
     late int posicaoAtual;
 
-    if (gameFinished) {
+    if (jogoFinalizado) {
       mensagemDados = '';
-      currentPlayer = currentPlayer == 1 ? 2 : 1;
+      jogadorAtual = jogadorAtual == 1 ? 2 : 1;
       return 'O jogo acabou!';
     }
 
@@ -221,37 +216,37 @@ class CobrasEscadas with ChangeNotifier {
       final posicoesAlemDaUltimaCasa = posicaoComDados - 100;
       posicaoAtual = 100 - posicoesAlemDaUltimaCasa;
     } else if (posicaoComDados == 100) {
-      gameFinished = true;
-      winner = jogadorAtual;
-      movePlayer(dado1: dado1, dado2: dado2);
+      jogoFinalizado = true;
+      vencedor = jogadorQueAcabouDeJogar;
+      moverJogador(dado1: dado1, dado2: dado2);
       return 'Jogador $numeroJogadorAtual venceu!';
     } else {
       posicaoAtual = posicaoComDados;
     }
 
-    movePlayer(dado1: dado1, dado2: dado2);
+    moverJogador(dado1: dado1, dado2: dado2);
     return 'Jogador $numeroJogadorAtual está na casa $posicaoAtual';
   }
 
   void reiniciar() {
-    snakes = [];
-    ladders = [];
-    colors = [];
-    player1 = Player(position: 1, playerNumber: 1);
-    player2 = Player(position: 1, playerNumber: 2);
-    currentPlayer = 1;
-    lastPlayer = 2;
-    message = "Aperte o botão para jogar!";
+    cobras = [];
+    escadas = [];
+    cores = [];
+    jogador1 = Jogador(posicao: 1, numeroDoJogador: 1);
+    jogador2 = Jogador(posicao: 1, numeroDoJogador: 2);
+    jogadorAtual = 1;
+    ultimoJogador = 2;
+    mensagem = "Aperte o botão para jogar!";
     mensagemDados = '';
-    showSnakeAlert = false;
-    showLadderAlert = false;
-    playRunning = false;
-    gameFinished = false;
-    winner = null;
+    mostrarAlertaDeCobra = false;
+    mostrarAlertaDeEscada = false;
+    jogadaEmAndamento = false;
+    jogoFinalizado = false;
+    vencedor = null;
 
-    _generateLadders();
-    _generateSnakes();
-    _generateColors();
+    _gerarEscadas();
+    _gerarCobras();
+    _gerarCores();
 
     notifyListeners();
   }

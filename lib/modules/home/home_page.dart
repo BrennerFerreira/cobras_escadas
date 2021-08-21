@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../entities/cobras_escadas/cobras_escadas.dart';
-import '../../entities/tile/tile.dart';
-import 'widgets/tile_card.dart';
+import '../../entities/casa/casa.dart';
+import 'widgets/card_casa.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,25 +11,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void snakeAlertListener() {
-    if (context.read<CobrasEscadas>().showSnakeAlert) {
+  void listenerAlertaDeCobra() {
+    if (context.read<CobrasEscadas>().mostrarAlertaDeCobra) {
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          final lastPlayer = context.read<CobrasEscadas>().lastPlayer == 1
-              ? context.read<CobrasEscadas>().player1
-              : context.read<CobrasEscadas>().player2;
+          final ultimoJogador = context.read<CobrasEscadas>().ultimoJogador == 1
+              ? context.read<CobrasEscadas>().jogador1
+              : context.read<CobrasEscadas>().jogador2;
           return AlertDialog(
             title: Text("Que pena!"),
             content: Text(
               "Você caiu numa casa que tem uma cabeça de cobra! "
-              "Retorne até a cauda dela na casa ${lastPlayer.position}!",
+              "Retorne até a cauda dela na casa ${ultimoJogador.posicao}!",
             ),
             actions: [
               TextButton(
                 onPressed: () {
-                  context.read<CobrasEscadas>().showSnakeAlert = false;
+                  context.read<CobrasEscadas>().mostrarAlertaDeCobra = false;
                   Navigator.of(context).pop();
                 },
                 child: Text("OK"),
@@ -41,25 +41,25 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void ladderAlertListener() {
-    if (context.read<CobrasEscadas>().showLadderAlert) {
+  void listenerAlertaDeEscada() {
+    if (context.read<CobrasEscadas>().mostrarAlertaDeEscada) {
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          final lastPlayer = context.read<CobrasEscadas>().currentPlayer == 1
-              ? context.read<CobrasEscadas>().player2
-              : context.read<CobrasEscadas>().player1;
+          final ultimoJogador = context.read<CobrasEscadas>().jogadorAtual == 1
+              ? context.read<CobrasEscadas>().jogador2
+              : context.read<CobrasEscadas>().jogador1;
           return AlertDialog(
             title: Text("Uhul!"),
             content: Text(
               "Você caiu numa casa que tem a base de uma escada! "
-              "Você vai subir até o topo dela na casa ${lastPlayer.position}!",
+              "Você vai subir até o topo dela na casa ${ultimoJogador.posicao}!",
             ),
             actions: [
               TextButton(
                 onPressed: () {
-                  context.read<CobrasEscadas>().showLadderAlert = false;
+                  context.read<CobrasEscadas>().mostrarAlertaDeEscada = false;
                   Navigator.of(context).pop();
                 },
                 child: Text("OK"),
@@ -74,16 +74,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<CobrasEscadas>()
-      ..addListener(snakeAlertListener)
-      ..addListener(ladderAlertListener);
+      ..addListener(listenerAlertaDeCobra)
+      ..addListener(listenerAlertaDeEscada);
     super.initState();
   }
 
-  final list = List.generate(10, (index) => index);
+  final lista = List.generate(10, (index) => index);
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final larguraDaTela = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -93,9 +93,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(
-                  provider.gameFinished
+                  provider.jogoFinalizado
                       ? "O jogo acabou!"
-                      : "Vez do jogador ${provider.currentPlayer}",
+                      : "Vez do jogador ${provider.jogadorAtual}",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -110,21 +110,21 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 margin: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.025,
+                  horizontal: larguraDaTela * 0.025,
                 ),
-                height: screenWidth * 0.95,
-                width: screenWidth * 0.95,
+                height: larguraDaTela * 0.95,
+                width: larguraDaTela * 0.95,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   verticalDirection: VerticalDirection.up,
-                  children: list.map(
-                    (columnNumber) {
+                  children: lista.map(
+                    (numeroDaLinha) {
                       return Expanded(
                         child: Row(
-                          children: columnNumber % 2 == 0
-                              ? mapListToTile(columnNumber, list)
+                          children: numeroDaLinha % 2 == 0
+                              ? mapListToTile(numeroDaLinha, lista)
                               : mapListToTile(
-                                  columnNumber, list.reversed.toList()),
+                                  numeroDaLinha, lista.reversed.toList()),
                         ),
                       );
                     },
@@ -143,22 +143,23 @@ class _HomePageState extends State<HomePage> {
                       shadowColor: Colors.blue.withOpacity(0.5),
                       elevation: 5,
                     ),
-                    onPressed: provider.playRunning
+                    onPressed: provider.jogadaEmAndamento
                         ? null
                         : () {
-                            if (provider.gameFinished) {
+                            if (provider.jogoFinalizado) {
                               provider.reiniciar();
                             } else {
-                              provider.playButtonPressed();
+                              provider.botaoJogarPressionado();
                             }
                           },
-                    child: Text(provider.gameFinished ? "Reiniciar" : "Jogar"),
+                    child:
+                        Text(provider.jogoFinalizado ? "Reiniciar" : "Jogar"),
                   ),
                 ),
               ),
               Consumer<CobrasEscadas>(
                 builder: (context, provider, _) => Text(
-                  provider.gameFinished ? '' : provider.message,
+                  provider.jogoFinalizado ? '' : provider.mensagem,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -238,28 +239,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Consumer<CobrasEscadas>> mapListToTile(
-    int columnNumber,
-    List<int> list,
+    int numeroDaLinha,
+    List<int> lista,
   ) {
-    return list.map(
-      (rowNumber) {
+    return lista.map(
+      (numeroDaColuna) {
         return Consumer<CobrasEscadas>(
           builder: (context, provider, _) {
-            final tileNumber = (10 * columnNumber) + rowNumber + 1;
-            return TileCard(
-              tile: Tile(
-                tileNumber: "$tileNumber",
-                ladderTopHere:
-                    provider.ladders.any((ladder) => ladder.top == tileNumber),
-                ladderBaseHere:
-                    provider.ladders.any((ladder) => ladder.base == tileNumber),
-                snakeHeadHere:
-                    provider.snakes.any((snake) => snake.head == tileNumber),
-                snakeTailHere:
-                    provider.snakes.any((snake) => snake.tail == tileNumber),
-                isPlayerOneHere: provider.player1.position == tileNumber,
-                isPlayerTwoHere: provider.player2.position == tileNumber,
-                tileColorValue: provider.colors[tileNumber - 1],
+            final numeroDaCasa = (10 * numeroDaLinha) + numeroDaColuna + 1;
+            return CardDeCasa(
+              casa: Casa(
+                numeroDaCasa: "$numeroDaCasa",
+                haTopoDeEscada: provider.escadas
+                    .any((escada) => escada.topo == numeroDaCasa),
+                haBaseDeEscada: provider.escadas
+                    .any((escada) => escada.base == numeroDaCasa),
+                haCabecaDeCobra: provider.cobras
+                    .any((cobra) => cobra.cabeca == numeroDaCasa),
+                haCaudaDeCobra:
+                    provider.cobras.any((cobra) => cobra.cauda == numeroDaCasa),
+                jogador1EstaNaCasa: provider.jogador1.posicao == numeroDaCasa,
+                jogador2EstaNaCasa: provider.jogador2.posicao == numeroDaCasa,
+                corDaCasa: provider.cores[numeroDaCasa - 1],
               ),
             );
           },
@@ -271,8 +272,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     context.read<CobrasEscadas>()
-      ..removeListener(snakeAlertListener)
-      ..removeListener(ladderAlertListener);
+      ..removeListener(listenerAlertaDeCobra)
+      ..removeListener(listenerAlertaDeEscada);
     super.dispose();
   }
 }

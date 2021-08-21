@@ -1,7 +1,7 @@
 import 'dart:math';
 
-class PositionGenerator {
-  static int generatePosition() {
+class GeradorDePosicoes {
+  static int gerarPosicoes() {
     final random = Random();
     return random.nextInt(97) + 2;
   }

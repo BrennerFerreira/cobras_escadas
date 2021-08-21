@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../entities/cobras_escadas/cobras_escadas.dart';
-import '../../../entities/tile/tile.dart';
+import '../../../entities/casa/casa.dart';
 
-class TileCard extends StatelessWidget {
-  final Tile tile;
-  const TileCard({Key? key, required this.tile}) : super(key: key);
+class CardDeCasa extends StatelessWidget {
+  final Casa casa;
+  const CardDeCasa({Key? key, required this.casa}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    int? snakeIndex;
-    int? ladderIndex;
-    if (tile.snakeHeadHere || tile.snakeTailHere) {
-      snakeIndex = context.read<CobrasEscadas>().snakes.indexWhere(
-                (snake) =>
-                    snake.head == int.tryParse(tile.tileNumber) ||
-                    snake.tail == int.tryParse(tile.tileNumber),
+    int? indiceDeCobra;
+    int? indiceDeEscada;
+    if (casa.haCabecaDeCobra || casa.haCaudaDeCobra) {
+      indiceDeCobra = context.read<CobrasEscadas>().cobras.indexWhere(
+                (cobra) =>
+                    cobra.cabeca == int.tryParse(casa.numeroDaCasa) ||
+                    cobra.cauda == int.tryParse(casa.numeroDaCasa),
               ) +
           1;
     }
 
-    if (tile.ladderTopHere || tile.ladderBaseHere) {
-      ladderIndex = context.read<CobrasEscadas>().ladders.indexWhere(
-                (ladder) =>
-                    ladder.top == int.tryParse(tile.tileNumber) ||
-                    ladder.base == int.tryParse(tile.tileNumber),
+    if (casa.haTopoDeEscada || casa.haBaseDeEscada) {
+      indiceDeEscada = context.read<CobrasEscadas>().escadas.indexWhere(
+                (escada) =>
+                    escada.topo == int.tryParse(casa.numeroDaCasa) ||
+                    escada.base == int.tryParse(casa.numeroDaCasa),
               ) +
           1;
     }
@@ -37,11 +37,11 @@ class TileCard extends StatelessWidget {
             color: Colors.grey.shade300,
             width: 0.25,
           ),
-          color: tile.tileColorValue.withOpacity(0.4),
+          color: casa.corDaCasa.withOpacity(0.4),
         ),
         child: Stack(
           children: [
-            if (tile.tileNumber == "1")
+            if (casa.numeroDaCasa == "1")
               Center(
                 child: Icon(
                   Icons.arrow_right_alt,
@@ -49,7 +49,7 @@ class TileCard extends StatelessWidget {
                   size: 30,
                 ),
               ),
-            if (tile.tileNumber == "100")
+            if (casa.numeroDaCasa == "100")
               Center(
                 child: Icon(
                   Icons.home,
@@ -64,35 +64,35 @@ class TileCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        tile.tileNumber,
+                        casa.numeroDaCasa,
                         style: TextStyle(
                           fontSize: 12,
                         ),
                       ),
-                      if (tile.ladderTopHere)
+                      if (casa.haTopoDeEscada)
                         Text(
-                          "TE$ladderIndex",
+                          "TE$indiceDeEscada",
                           style: TextStyle(
                             fontSize: 8,
                           ),
                         ),
-                      if (tile.ladderBaseHere)
+                      if (casa.haBaseDeEscada)
                         Text(
-                          "BE$ladderIndex",
+                          "BE$indiceDeEscada",
                           style: TextStyle(
                             fontSize: 8,
                           ),
                         ),
-                      if (tile.snakeHeadHere)
+                      if (casa.haCabecaDeCobra)
                         Text(
-                          "CC$snakeIndex",
+                          "CC$indiceDeCobra",
                           style: TextStyle(
                             fontSize: 8,
                           ),
                         ),
-                      if (tile.snakeTailHere)
+                      if (casa.haCaudaDeCobra)
                         Text(
-                          "RC$snakeIndex",
+                          "RC$indiceDeCobra",
                           style: TextStyle(
                             fontSize: 8,
                           ),
@@ -101,7 +101,7 @@ class TileCard extends StatelessWidget {
                   ),
                 ),
                 AnimatedOpacity(
-                  opacity: tile.isPlayerOneHere ? 1 : 0,
+                  opacity: casa.jogador1EstaNaCasa ? 1 : 0,
                   duration: const Duration(milliseconds: 500),
                   child: Container(
                     height: 10,
@@ -110,7 +110,7 @@ class TileCard extends StatelessWidget {
                   ),
                 ),
                 AnimatedOpacity(
-                  opacity: tile.isPlayerTwoHere ? 1 : 0,
+                  opacity: casa.jogador2EstaNaCasa ? 1 : 0,
                   duration: const Duration(milliseconds: 500),
                   child: Container(
                     height: 10,
