@@ -1,7 +1,7 @@
-import 'package:cobras_e_escadas/entities/cobras_escadas/cobras_escadas.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../entities/cobras_escadas/cobras_escadas.dart';
 import '../../../entities/tile/tile.dart';
 
 class TileCard extends StatelessWidget {
