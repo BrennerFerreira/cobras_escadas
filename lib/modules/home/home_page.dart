@@ -102,6 +102,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+              Consumer<CobrasEscadas>(
+                builder: (context, provider, _) => Text(
+                  provider.mensagemDados,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
               Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.025,
@@ -147,7 +153,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Consumer<CobrasEscadas>(
-                builder: (context, provider, _) => Text(provider.message),
+                builder: (context, provider, _) => Text(
+                  provider.message,
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -181,6 +190,39 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 12,
                     ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 5,
+                        width: 5,
+                        color: Colors.black,
+                      ),
+                      Text(
+                        " : posição do jogador 1",
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 5,
+                        width: 5,
+                        decoration: BoxDecoration(
+                            color: Colors.black, shape: BoxShape.circle),
+                      ),
+                      Text(
+                        " : posição do jogador 2",
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

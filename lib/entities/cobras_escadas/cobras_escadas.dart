@@ -15,6 +15,7 @@ class CobrasEscadas with ChangeNotifier {
   int currentPlayer = 1;
   int lastPlayer = 2;
   String message = "Aperte o botão para jogar!";
+  String mensagemDados = '';
   bool showSnakeAlert = false;
   bool showLadderAlert = false;
   bool playRunning = false;
@@ -30,6 +31,8 @@ class CobrasEscadas with ChangeNotifier {
   List<int> _rollDice() {
     final dado1 = Random().nextInt(6) + 1;
     final dado2 = Random().nextInt(6) + 1;
+
+    mensagemDados = "Dados: $dado1 + $dado2";
 
     return [dado1, dado2];
   }
@@ -209,6 +212,7 @@ class CobrasEscadas with ChangeNotifier {
     late int posicaoAtual;
 
     if (gameFinished) {
+      mensagemDados = '';
       currentPlayer = currentPlayer == 1 ? 2 : 1;
       if (jogadorAtual.playerNumber == winner!.playerNumber) {
         return 'Você venceu!';
